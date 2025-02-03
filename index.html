@@ -49,7 +49,7 @@ button:hover {
   margin-top: 20px;
   text-align: left;
 }
-      </style>
+  </style>
 </head>
 <body>
   <div class="container">
@@ -60,48 +60,74 @@ button:hover {
     <button onclick="showHistory()">Show History</button>
     <div id="history"></div>
   </div>
+
   <script>
-      // Function to generate a random password
-function generatePassword() {
-  const length = 12;
-  const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
-  let password = "";
-  for (let i = 0; i < length; i++) {
-    password += charset.charAt(Math.floor(Math.random() * charset.length));
-  }
-  document.getElementById("password").value = password;
-}
+    // Function to generate a random password
+    function generatePassword() {
+      const length = 12;
+      const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+      let password = "";
+      for (let i = 0; i < length; i++) {
+        password += charset.charAt(Math.floor(Math.random() * charset.length));
+      }
+      document.getElementById("password").value = password;
+    }
 
-// Function to save the password to a .txt file
-function savePassword() {
-  const password = document.getElementById("password").value;
-  if (password) {
-    const blob = new Blob([password + "\n"], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "passwords.txt";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    alert("Password saved to passwords.txt");
-  } else {
-    alert("No password generated!");
-  }
-}
+    // Function to save the password to localStorage and GitHub
+    function savePassword() {
+      const password = document.getElementById("password").value;
+      if (password) {
+        // Save password to localStorage
+        let savedPasswords = JSON.parse(localStorage.getItem("passwords")) || [];
+        savedPasswords.push(password);
+        localStorage.setItem("passwords", JSON.stringify(savedPasswords));
 
-// Function to show saved passwords (history)
-function showHistory() {
-  const historyDiv = document.getElementById("history");
-  historyDiv.innerHTML = "<h2>Saved Passwords</h2>";
-  // Load passwords from the file (if available)
-  fetch("passwords.txt")
-    .then((response) => response.text())
-    .then((data) => {
-      const passwords = data.split("\n").filter((p) => p.trim() !== "");
-      if (passwords.length > 0) {
-        passwords.forEach((password) => {
+        // Save to GitHub (ensure you replace the token and repo details)
+        saveToGitHub(password);
+
+        alert("Password saved!");
+      } else {
+        alert("No password generated!");
+      }
+    }
+
+    // Function to save the password to GitHub
+    async function saveToGitHub(password) {
+      const token = "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"; // Replace with your GitHub token
+      const repo = "VMC"; // Replace with your repo name
+      const path = "passwords.txt";
+      const url = `https://api.github.com/repos/ssairam18/${repo}/contents/${path}`;
+
+      const content = btoa(password + "\n"); // Encode to base64
+
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          Authorization: `token ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: "Update passwords.txt",
+          content: content,
+          sha: "", // Add the SHA of the file if it already exists
+        }),
+      });
+
+      if (!response.ok) {
+        alert("Failed to save to GitHub.");
+      }
+    }
+
+    // Function to show saved passwords
+    function showHistory() {
+      const historyDiv = document.getElementById("history");
+      historyDiv.innerHTML = "<h2>Saved Passwords</h2>";
+
+      // Get passwords from localStorage
+      const savedPasswords = JSON.parse(localStorage.getItem("passwords")) || [];
+
+      if (savedPasswords.length > 0) {
+        savedPasswords.forEach((password) => {
           const p = document.createElement("p");
           p.textContent = password;
           historyDiv.appendChild(p);
@@ -109,43 +135,7 @@ function showHistory() {
       } else {
         historyDiv.innerHTML += "<p>No passwords saved yet.</p>";
       }
-    })
-    .catch(() => {
-      historyDiv.innerHTML += "<p>No passwords saved yet.</p>";
-    });
-}
-      async function saveToGitHub() {
-  const password = document.getElementById("password").value;
-  if (password) {
-    const token = "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"; // Replace with your GitHub token
-    const repo = "VMC"; // Replace with your repo name
-    const path = "passwords.txt";
-    const url = `https://api.github.com/repos/ssairam18/${repo}/contents/${path}`;
-
-    const content = btoa(password + "\n"); // Encode to base64
-
-    const response = await fetch(url, {
-      method: "PUT",
-      headers: {
-        Authorization: `token ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message: "Update passwords.txt",
-        content: content,
-        sha: "", // Add the SHA of the file if it already exists
-      }),
-    });
-
-    if (response.ok) {
-      alert("Password saved to GitHub!");
-    } else {
-      alert("Failed to save to GitHub.");
     }
-  } else {
-    alert("No password generated!");
-  }
-}
   </script>
 </body>
 </html>
