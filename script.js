@@ -1,37 +1,36 @@
-// Function to generate random password
+document.getElementById("generateButton").addEventListener("click", generatePassword);
+document.getElementById("saveButton").addEventListener("click", savePassword);
+document.getElementById("historyButton").addEventListener("click", showHistory);
+
+let generatedPassword = '';
+
 function generatePassword() {
-  const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=<>?";
-  let password = "";
-  for (let i = 0; i < 12; i++) {
-    const randomIndex = Math.floor(Math.random() * charset.length);
-    password += charset[randomIndex];
-  }
-  document.getElementById('password').value = password;
+    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+    const passwordLength = 12;
+    generatedPassword = '';
+    for (let i = 0; i < passwordLength; i++) {
+        generatedPassword += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+    document.getElementById("passwordDisplay").textContent = generatedPassword;
+    document.getElementById("saveButton").disabled = false;
 }
 
-// Function to save password
 function savePassword() {
-  const password = document.getElementById('password').value;
-  
-  if (!password) {
-    alert("Please generate a password first.");
-    return;
-  }
+    let passwords = JSON.parse(localStorage.getItem("passwordHistory")) || [];
+    passwords.push(generatedPassword);
+    localStorage.setItem("passwordHistory", JSON.stringify(passwords));
+    document.getElementById("saveButton").disabled = true;
+}
 
-  // Send password to server (Node.js backend for storing in data.db)
-  fetch('/save-password', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ password })
-  })
-  .then(response => response.json())
-  .then(data => {
-    alert(data.message);
-  })
-  .catch(err => {
-    console.error(err);
-    alert("Failed to save password.");
-  });
+function showHistory() {
+    const historyContainer = document.getElementById("historyContainer");
+    let passwords = JSON.parse(localStorage.getItem("passwordHistory")) || [];
+    historyContainer.innerHTML = "<h3>Password History</h3>";
+    if (passwords.length > 0) {
+        passwords.forEach((password, index) => {
+            historyContainer.innerHTML += `<p>${index + 1}: ${password}</p>`;
+        });
+    } else {
+        historyContainer.innerHTML += "<p>No passwords saved yet.</p>";
+    }
 }
