@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Password Generator</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Random Password Generator</h1>
-    <input type="text" id="password" readonly>
-    <button onclick="generatePassword()">Generate Password</button>
-    <button onclick="savePassword()">Save Password</button>
-  </div>
+    <div class="container">
+        <h1>Password Generator</h1>
+        <button id="generateButton">Generate Password</button>
+        <p id="passwordDisplay"></p>
+        <button id="saveButton" disabled>Save Password</button>
+        <button id="historyButton">Show History</button>
+        <div id="historyContainer"></div>
+    </div>
 
-  <script src="script.js"></script>
+   <script src="script.js"></script>
 </body>
 </html>
