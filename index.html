@@ -1,80 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>DHAMMA</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Generator</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1 class="gold-glass-effect">ALL INFORMATION CHART</h1>
-  <h1 class="glass-effect01" id="teacherHeading" style="display: none;">TEACHER</h1>
+  <div class="container">
+    <h1>Random Password Generator</h1>
+    <input type="text" id="password" readonly>
+    <button onclick="generatePassword()">Generate Password</button>
+    <button onclick="savePassword()">Save Password</button>
+  </div>
 
-<script>
-  function showTeacher() {
-    document.getElementById('teacherHeading').style.display = 'block';
-  }
-</script>
-  <div class="grid" id="mainGrid"></div>
-   <div class="menu-bar">
-        <div class="menu-item">
-            File
-            <div class="submenu">
-                <a href="javascript:void(0);" onclick="createNewGrid()">New</a>
-                <a href="javascript:void(0);" onclick="loadGrid()">Load</a>
-                <a href="javascript:void(0);" onclick="saveData()">Save</a>
-                <!--<a href="javascript:void(0);" onclick="copyScript()">Copy</a>-->
-                <a href="javascript:void(0);" onclick="exportData()">Export</a>
-                <a href="javascript:void(0);" onclick="window.print()">Print</a>
-            </div>
-        </div>
-        
-        <div class="menu-item">
-            Edit
-            <div class="submenu">
-              <a href="javascript:void(0);" onclick="addRow()">Add Row</a>
-              <a href="javascript:void(0);" onclick="addColumn()">Add Column</a>
-                <a href="javascript:void(0);" onclick="applyBorders()">Set Border</a>
-                <a href="javascript:void(0);" onclick="swapCells()">Swap Cells</a>
-                <a href="https://htmledit.squarefree.com/" target ="_blank">editor</a>
-                <a href="https://ssairam18.blogspot.com/p/vmc.html" target ="_blank">Table view</a>
-            </div>
-        </div>
-       
-    </div>
-  
-    <!-- Statistics Section -->
-    <div class="stats" id="statistics">
-        <div class="stat-group">
-            <h3 class="stat-header">Total</h3>
-            <div class="stat-item">Present: <span id="total-present">0</span></div>
-            <div class="stat-item">Absent: <span id="total-absent">0</span></div>
-            <div class="stat-item">Left: <span id="total-left">0</span></div>
-        </div>
-        <div class="stat-group">
-            <h3 class="stat-header">By Language</h3>
-            <div id="lang-stats"></div>
-        </div>
-        <div class="stat-group">
-            <h3 class="stat-header">By Old/New</h3>
-            <div id="oldnew-stats"></div>
-        </div>
-    </div>
-
-    <div id="editModal">
-        <input type="text" id="name" placeholder="Name"><br>
-        <input type="text" id="room" placeholder="Room No"><br>
-        <input type="text" id="pagoda" placeholder="Pagoda No"><br>
-        <input type="text" id="plate" placeholder="Plate No"><br>
-        <input type="text" id="lang" placeholder="Language"><br>
-        <input type="text" id="oldnew" placeholder="Old/New"><br>
-        <select id="status">
-            <option value="present">Present</option>
-            <option value="absent">Absent</option>
-            <option value="left">Left</option>
-        </select><br>
-        <button onclick="saveCell()">Save</button>
-        <button onclick="closeModal()">Cancel</button>
-    </div>
-
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
-    
+  <script src="script.js"></script>
+</body>
+</html>
